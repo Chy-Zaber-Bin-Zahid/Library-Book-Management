@@ -1,6 +1,8 @@
+import Forum from "./Forum"
+
 function Add() {
   return (
-    <div>Add</div>
+    <Forum/>
   )
 }
 

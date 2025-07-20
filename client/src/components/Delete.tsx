@@ -1,6 +1,8 @@
+import Forum from "./Forum"
+
 function Delete() {
   return (
-    <div>Delete</div>
+    <Forum />
   )
 }
 

@@ -1,6 +1,8 @@
+import Forum from "./Forum"
+
 function Update() {
   return (
-    <div>Update</div>
+    <Forum />
   )
 }
 

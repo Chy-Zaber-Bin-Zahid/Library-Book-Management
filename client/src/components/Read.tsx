@@ -1,6 +1,8 @@
+import Forum from "./Forum"
+
 function Read() {
   return (
-    <div>Read</div>
+    <Forum/>
   )
 }
 

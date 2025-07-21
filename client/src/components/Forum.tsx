@@ -40,7 +40,7 @@ function Forum() {
 
     return (
         <div className="w-full h-screen flex items-center justify-center">
-            <form className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4">
+            <form onSubmit={(e) => {e.preventDefault()}} className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4">
                 <h1 className="text-2xl font-bold mb-4">{forum === "add" ? "Add Book" : forum === "delete" ? "Delete Book" : forum === "update" ? "Update Book" : "Get All Book"}</h1>
                 {forum === "add" ? (
                     <input

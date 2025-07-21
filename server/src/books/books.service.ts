@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PG_CONNECTION } from 'src/constants';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -20,7 +20,7 @@ export class BooksService {
         data: res.rows[0],
       };
     } catch (error) {
-      throw new Error(`Failed to create book: ${error}`);
+      throw new NotFoundException(`Failed to create book: ${error}`);
     }
   }
 
@@ -34,13 +34,23 @@ export class BooksService {
         data: res.rows,
       };
     } catch (error) {
-      throw new Error(`Failed to create book: ${error}`);
+      throw new NotFoundException(`Failed to create book: ${error}`);
     }
   }
 
   async update(id: number, updateBookDto: UpdateBookDto) {
     try {
       console.log(id, updateBookDto);
+
+      const found = await this.conn.query(
+        'select * from books where id = ($1)',
+        [id],
+      );
+
+      if (found.rows.length === 0) {
+        throw new NotFoundException(`Book with id ${id} not found`);
+      }
+
       const res = await this.conn.query(
         'update books set book = ($1) where id = ($2) returning *',
         [updateBookDto.book, id],
@@ -52,12 +62,21 @@ export class BooksService {
         data: res.rows[0],
       };
     } catch (error) {
-      throw new Error(`Failed to create book: ${error}`);
+      throw new NotFoundException(`Failed to create book: ${error}`);
     }
   }
 
   async remove(id: number) {
     try {
+      const found = await this.conn.query('select * from books where id = ($1)', [
+        id,
+      ]);
+
+      if (found.rows.length === 0) {
+        console.log('Book not found');
+        throw new NotFoundException(`Book with id ${id} not found`);
+      }
+
       const res = await this.conn.query(
         'delete from books where id = ($1) returning *',
         [id],
@@ -69,7 +88,7 @@ export class BooksService {
         data: res.rows[0],
       };
     } catch (error) {
-      throw new Error(`Failed to create book: ${error}`);
+      throw new NotFoundException(`Failed to create book: ${error}`);
     }
   }
 }

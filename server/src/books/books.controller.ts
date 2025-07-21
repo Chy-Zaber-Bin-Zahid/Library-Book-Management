@@ -26,12 +26,13 @@ export class BooksController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  update(@Param('id') id: number, @Body() updateBookDto: UpdateBookDto) {
+    console.log('Updating book with ID:', typeof id);
+    return this.booksService.update(id, updateBookDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.booksService.remove(id);
   }
 }

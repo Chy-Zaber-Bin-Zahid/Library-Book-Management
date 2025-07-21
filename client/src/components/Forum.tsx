@@ -12,7 +12,6 @@ function Forum() {
     const [book, setBook] = useState<string>("");
     const [bookId, setBookId] = useState<string>("");
     const [allBooks, setAllBooks] = useState<Array<Book>>([]);
-    console.log(allBooks)
 
     // useEffect(() => {
     // async function fetchData() {
@@ -26,13 +25,14 @@ function Forum() {
     // }, [forum]);
 
     async function handleClick() {
-        if (forum === "add") {
+        if (forum === "add" && book.length > 0) {
+            console.log("Adding book:", book.length);
             addBook({ book });                
-        } else if (forum === "delete") {
+        } else if (forum === "delete" && bookId.length > 0) {
             deleteBook(bookId);
-        } else if (forum === "update") {
+        } else if (forum === "update" && book.length > 0 && bookId .length > 0) {
             updateBook(bookId, book);
-        } else {
+        } else if (forum === "read") {
             const books = await fetchBook();
             setAllBooks(books.data);
         }
@@ -40,7 +40,7 @@ function Forum() {
 
     return (
         <div className="w-full h-screen flex items-center justify-center">
-            <div className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4">
+            <form className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4">
                 <h1 className="text-2xl font-bold mb-4">{forum === "add" ? "Add Book" : forum === "delete" ? "Delete Book" : forum === "update" ? "Update Book" : "Get All Book"}</h1>
                 {forum === "add" ? (
                     <input
@@ -87,10 +87,10 @@ function Forum() {
                     </div>
                    </>
                 )}
-                <button onClick={handleClick} className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-600 delay-200">
+                <button type="submit" onClick={handleClick} className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-600 delay-200">
                     {forum === "add" ? "Submit" : forum === "delete" ? "Delete" : forum === "update" ? "Update" : "Fetch Books" }
                 </button>
-            </div>
+            </form>
         </div>
     )
 }

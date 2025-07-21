@@ -40,6 +40,7 @@ export class BooksService {
 
   async update(id: number, updateBookDto: UpdateBookDto) {
     try {
+      console.log(id, updateBookDto);
       const res = await this.conn.query(
         'update books set book = ($1) where id = ($2) returning *',
         [updateBookDto.book, id],

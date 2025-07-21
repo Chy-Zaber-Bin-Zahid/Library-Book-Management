@@ -6,7 +6,7 @@ export async function fetchBook() {
   return await res.json();
 }
 
-export async function addBook(data: { name: string; }) {
+export async function addBook(data: { book: string; }) {
   const res = await fetch(`${API_URL}/books`, {
     method: "POST",
     headers: {
@@ -18,17 +18,21 @@ export async function addBook(data: { name: string; }) {
   return await res.json();
 }
 
-export async function deleteBook(userId: string) {
-  const res = await fetch(`${API_URL}/books/${userId}`, {
+export async function deleteBook(id: string) {
+  const res = await fetch(`${API_URL}/books/${id}`, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Failed to delete book");
   return await res.json();
 }
 
-export async function updateBook(userId: string) {
-  const res = await fetch(`${API_URL}/books/${userId}`, {
+export async function updateBook(id: string, book: string) {
+  const res = await fetch(`${API_URL}/books/${id}`, {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ book }),
   });
   if (!res.ok) throw new Error("Failed to update book");
   return await res.json();

@@ -2,21 +2,39 @@ import { useState } from "react";
 import { addBook, deleteBook, fetchBook, updateBook } from "../api/apis";
 import { useMyContext } from "../context/contextApi";
 
+type Book = {
+  id: number;
+  book: string;
+};
+
 function Forum() {
     const { forum } = useMyContext();
     const [book, setBook] = useState<string>("");
-    const [allBooks, setAllBooks] = useState<string[]>([]);
+    const [bookId, setBookId] = useState<string>("");
+    const [allBooks, setAllBooks] = useState<Array<Book>>([]);
+    console.log(allBooks)
+
+    // useEffect(() => {
+    // async function fetchData() {
+    //     if (forum === "read") {
+    //     const books = await fetchBook();
+    //     setAllBooks(books.data);
+    //     }
+    // }
+
+    // fetchData();
+    // }, [forum]);
 
     async function handleClick() {
         if (forum === "add") {
-            addBook({ name: book });                
+            addBook({ book });                
         } else if (forum === "delete") {
-            deleteBook(book);
+            deleteBook(bookId);
         } else if (forum === "update") {
-            updateBook(book);
+            updateBook(bookId, book);
         } else {
             const books = await fetchBook();
-            setAllBooks(books);
+            setAllBooks(books.data);
         }
     }
 
@@ -38,29 +56,34 @@ function Forum() {
                         placeholder="Enter book id"
                         className="border p-2 rounded w-full mb-4"
                         required
-                        onChange={(e) => setBook(e.target.value)}
+                        onChange={(e) => setBookId(e.target.value)}
                     />
                 ) : forum === "update" ? (
-                    <input
+                    <div>
+                        <input
                         type="text"
                         placeholder="Enter book id"
                         className="border p-2 rounded w-full mb-4"
                         required
+                        onChange={(e) => setBookId(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Edit book name"
+                        className="border p-2 rounded w-full mb-4"
+                        required
                         onChange={(e) => setBook(e.target.value)}
                     />
+                    </div>
                 ) : (
                    <>
                     <p>List of all books will be displayed here.</p>
                     <div>
-                        {allBooks.length > 0 ? (
-                            <ul className="list-disc pl-5">
-                                {allBooks.map((b, index) => (
-                                    <li key={index} className="mb-2">{b}</li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No books available.</p>
-                        )}
+                        <ul className="list-disc pl-5">
+                            {allBooks.map((b, index) => (
+                                <li key={index} className="mb-2">{b.book}</li>
+                            ))}
+                        </ul>
                     </div>
                    </>
                 )}

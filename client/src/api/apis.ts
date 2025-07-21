@@ -37,3 +37,15 @@ export async function updateBook(id: string, book: string) {
   if (!res.ok) throw new Error("Failed to update book");
   return await res.json();
 }
+
+export async function login(name: string, password: string) {
+  const res = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, password }),
+  });
+  if (!res.ok) throw new Error("Failed to login");
+  return await res.json();
+}

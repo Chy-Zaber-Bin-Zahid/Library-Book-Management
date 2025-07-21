@@ -5,6 +5,7 @@ import Delete from "./components/Delete";
 import Update from "./components/Update";
 import Read from "./components/Read";
 import NoPage from "./components/NoPage";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
           <Route path="add" element={<Add />} />
           <Route path="delete" element={<Delete />} />
           <Route path="update" element={<Update />} />

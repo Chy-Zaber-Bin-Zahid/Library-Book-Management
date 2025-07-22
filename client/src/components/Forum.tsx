@@ -1,46 +1,39 @@
 import { useState } from "react";
-import { addBook, deleteBook, fetchBook, updateBook } from "../api/apis";
+import { addBook, deleteBook, updateBook } from "../api/apis";
 import { useMyContext } from "../context/contextApi";
 
-type Book = {
-  id: number;
-  book: string;
-};
-
-function Forum() {
+function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void; refetch: () => void; id: number}) {
     const { forum } = useMyContext();
     const [book, setBook] = useState<string>("");
-    const [bookId, setBookId] = useState<string>("");
-    const [allBooks, setAllBooks] = useState<Array<Book>>([]);
+    const [bookId, setBookId] = useState<string>(String(id));
 
-    // useEffect(() => {
-    // async function fetchData() {
-    //     if (forum === "read") {
-    //     const books = await fetchBook();
-    //     setAllBooks(books.data);
-    //     }
-    // }
-
-    // fetchData();
-    // }, [forum]);
-
-    async function handleClick() {
+    function handleClick() {
         if (forum === "add" && book.length > 0) {
             console.log("Adding book:", book.length);
-            addBook({ book });                
+            addBook({ book }); 
+            setModal(false);
+            refetch();               
         } else if (forum === "delete" && bookId.length > 0) {
             deleteBook(bookId);
+            setModal(false);
+            refetch();
         } else if (forum === "update" && book.length > 0 && bookId .length > 0) {
             updateBook(bookId, book);
-        } else if (forum === "read") {
-            const books = await fetchBook();
-            setAllBooks(books.data);
+            setModal(false);
+            refetch();
         }
     }
 
     return (
         <div className="w-full h-screen flex items-center justify-center">
-            <form onSubmit={(e) => {e.preventDefault()}} className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4">
+            <form  onSubmit={(e) => {e.preventDefault(); handleClick();}} className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4 relative">
+                <button
+                    type="button"
+                    onClick={() => setModal(false)}
+                    className="absolute top-2 right-2 text-gray-600 hover:text-black text-xl font-bold cursor-pointer"
+                    >
+                    ×
+                </button>
                 <h1 className="text-2xl font-bold mb-4">{forum === "add" ? "Add Book" : forum === "delete" ? "Delete Book" : forum === "update" ? "Update Book" : "Get All Book"}</h1>
                 {forum === "add" ? (
                     <input
@@ -55,6 +48,7 @@ function Forum() {
                         type="text"
                         placeholder="Enter book id"
                         className="border p-2 rounded w-full mb-4"
+                        value={id}
                         required
                         onChange={(e) => setBookId(e.target.value)}
                     />
@@ -64,6 +58,7 @@ function Forum() {
                         type="text"
                         placeholder="Enter book id"
                         className="border p-2 rounded w-full mb-4"
+                        value={id}
                         required
                         onChange={(e) => setBookId(e.target.value)}
                     />
@@ -75,19 +70,8 @@ function Forum() {
                         onChange={(e) => setBook(e.target.value)}
                     />
                     </div>
-                ) : (
-                   <>
-                    <p>List of all books will be displayed here.</p>
-                    <div>
-                        <ul className="list-disc pl-5">
-                            {allBooks.map((b, index) => (
-                                <li key={index} className="mb-2">{b.book}</li>
-                            ))}
-                        </ul>
-                    </div>
-                   </>
-                )}
-                <button type="submit" onClick={handleClick} className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-600 delay-200">
+                ) : null}
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-600 delay-200">
                     {forum === "add" ? "Submit" : forum === "delete" ? "Delete" : forum === "update" ? "Update" : "Fetch Books" }
                 </button>
             </form>

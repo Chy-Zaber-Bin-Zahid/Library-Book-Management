@@ -7,21 +7,16 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
     const [book, setBook] = useState<string>("");
     const [bookId, setBookId] = useState<string>(String(id));
 
-    function handleClick() {
+    async function handleClick() {
         if (forum === "add" && book.length > 0) {
-            console.log("Adding book:", book.length);
-            addBook({ book }); 
-            setModal(false);
-            refetch();               
+            await addBook({ book });             
         } else if (forum === "delete" && bookId.length > 0) {
-            deleteBook(bookId);
-            setModal(false);
-            refetch();
+            await deleteBook(bookId);
         } else if (forum === "update" && book.length > 0 && bookId .length > 0) {
-            updateBook(bookId, book);
-            setModal(false);
-            refetch();
+            await updateBook(bookId, book);
         }
+        refetch();
+        setModal(false);
     }
 
     return (

@@ -21,7 +21,7 @@ function Home() {
 
   useEffect(() => {
     fetchData();
-  }, [allBooks]);
+  }, []);
 
   const handleClick = (type: string, id: number = 0) => {
     setForum(type);

@@ -26,7 +26,7 @@ export class BooksService {
 
   async findAll() {
     try {
-      const res = await this.conn.query('select * from books');
+      const res = await this.conn.query('select * from books order by id asc');
       console.log(res.rows);
       return {
         statusCode: 200,

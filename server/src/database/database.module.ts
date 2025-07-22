@@ -1,19 +1,23 @@
 import { Module } from '@nestjs/common';
-import { PG_CONNECTION } from 'src/constants';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Pool } from 'pg';
+import { PG_CONNECTION } from 'src/constants';
 
 const dbProvider = {
   provide: PG_CONNECTION,
-  useValue: new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'somedb',
-    password: '1234',
-    port: 5432,
-  }),
+  inject: [ConfigService],
+  useFactory: (configService: ConfigService) =>
+    new Pool({
+      user: configService.get<string>('DB_USER'),
+      host: configService.get<string>('DB_HOST'),
+      database: configService.get<string>('DB_DATABASE'),
+      password: configService.get<string>('DB_PASSWORD'),
+      port: configService.get<number>('DB_PORT'),
+    }),
 };
 
 @Module({
+  imports: [ConfigModule],
   providers: [dbProvider],
   exports: [dbProvider],
 })

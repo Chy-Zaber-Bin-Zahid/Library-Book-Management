@@ -1,15 +1,22 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { register } from "../api/apis";
 
 function Register() {
   const [fullName, setFullName] = useState<string>("")
-  const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit (e: React.FormEvent) {
     e.preventDefault()
-    // Add your registration logic here
-    console.log("Registration data:", { fullName, email, password })
+    if (fullName && password) {
+      try {
+        await register(fullName, password)
+        navigate("/login")
+      } catch (error) {
+        console.error("Register failed:", error)
+      }
+    }
   }
 
   return (
@@ -23,7 +30,7 @@ function Register() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="fullName" className="block text-slate-700 font-medium mb-3 text-base">
-              Full Name
+              Username
             </label>
             <input
               type="text"
@@ -32,21 +39,6 @@ function Register() {
               onChange={(e) => setFullName(e.target.value)}
               className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="John Doe"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-slate-700 font-medium mb-3 text-base">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="you@example.com"
               required
             />
           </div>

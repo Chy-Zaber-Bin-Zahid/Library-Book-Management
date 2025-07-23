@@ -19,9 +19,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() createAuthDto: CreateAuthDto) {
-    const store = await this.auth.signIn(createAuthDto);
-    console.log(store);
-    return store;
+    return await this.auth.signIn(createAuthDto);
+  }
+
+  @Post('register')
+  async register(@Body() createAuthDto: CreateAuthDto) {
+    return await this.auth.register(createAuthDto);
   }
 
   @UseGuards(AuthGuard)

@@ -6,7 +6,7 @@ import { UsersService } from 'src/users/users.service';
 type SignIn = {
   statusCode: number;
   message: string;
-  access_token: string;
+  access_token?: string;
 };
 
 @Injectable()
@@ -18,7 +18,6 @@ export class Auth {
   async signIn(createAuthDto: CreateAuthDto): Promise<SignIn | null> {
     try {
       const user = await this.usersService.findOne(createAuthDto);
-      console.log(user);
       if (!user) {
         return null;
       }
@@ -32,6 +31,22 @@ export class Auth {
       };
     } catch (error) {
       throw new UnauthorizedException(`Authentication failed: ${error}`);
+    }
+  }
+
+  async register(createAuthDto: CreateAuthDto): Promise<SignIn | null> {
+    try {
+      const user = await this.usersService.create(createAuthDto);
+      console.log(user);
+      if (!user) {
+        return null;
+      }
+      return {
+        statusCode: 201,
+        message: 'User register successfully',
+      };
+    } catch (error) {
+      throw new UnauthorizedException(`Register failed: ${error}`);
     }
   }
 }

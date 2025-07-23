@@ -49,3 +49,15 @@ export async function login(name: string, password: string) {
   if (!res.ok) throw new Error("Failed to login");
   return await res.json();
 }
+
+export async function register(name: string, password: string) {
+  const res = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, password }),
+  });
+  if (!res.ok) throw new Error("Failed to register");
+  return await res.json();
+}

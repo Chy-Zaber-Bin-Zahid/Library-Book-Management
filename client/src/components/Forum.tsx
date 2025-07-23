@@ -22,7 +22,7 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
 
     return (
         <div className="w-full h-screen flex items-center justify-center">
-            <form  onSubmit={(e) => {e.preventDefault(); handleClick();}} className="bg-white p-8 rounded shadow-lg w-[400px] flex flex-col items-center gap-4 relative">
+            <form  onSubmit={(e) => {e.preventDefault(); handleClick();}} className={`bg-white p-8 rounded shadow-lg ${forum === "delete" ? "w-[400px]" : "w-[550px]"} flex flex-col items-center gap-4 relative`}>
                 <button
                     type="button"
                     onClick={() => setModal(false)}
@@ -32,13 +32,60 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
                 </button>
                 <h1 className="text-2xl font-bold mb-4">{forum === "add" ? "Add Book" : forum === "delete" ? "" : forum === "update" ? "Update Book" : "Get All Book"}</h1>
                 {forum === "add" ? (
-                    <input
-                        type="text"
-                        placeholder="Enter book title"
-                        className="border p-2 rounded w-full mb-4"
-                        required
-                        onChange={(e) => setBook(e.target.value)}
-                    />
+                    <div className="space-y-6">
+                        <div>
+                        <label htmlFor="title" className="block text-gray-700 font-medium mb-3">
+                            Book Title
+                        </label>
+                        <input
+                            type="text"
+                            id="title"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g., The Great Gatsby"
+                            required
+                            onChange={(e) => setBook(e.target.value)}
+                        />
+                        </div>
+
+                        <div>
+                        <label htmlFor="author" className="block text-gray-700 font-medium mb-3">
+                            Author
+                        </label>
+                        <input
+                            type="text"
+                            id="author"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g., F. Scott Fitzgerald"
+                        />
+                        </div>
+
+                        {/* ISBN and Publication Date */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label htmlFor="isbn" className="block text-gray-700 font-medium mb-3">
+                            ISBN
+                            </label>
+                            <input
+                            type="text"
+                            id="isbn"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g., 978-3-16-148410-0"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="publicationDate" className="block text-gray-700 font-medium mb-3">
+                            Publication Date
+                            </label>
+                            <div className="relative">
+                            <input
+                                type="date"
+                                id="publicationDate"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                            />
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                 ) : forum === "delete" ? (
                         <div>
                              <input
@@ -62,22 +109,56 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
                         </div>
                 
                 ) : forum === "update" ? (
-                    <div>
-                        <input
-                        type="text"
-                        placeholder="Enter book id"
-                        className="border p-2 rounded w-full mb-4"
-                        value={id}
-                        required
-                        onChange={(e) => setBookId(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Edit book name"
-                        className="border p-2 rounded w-full mb-4"
-                        required
-                        onChange={(e) => setBook(e.target.value)}
-                    />
+                    <div className="w-full">
+                    <div className="space-y-6 p-4">
+                        <div>
+                            <label className="block text-gray-600 font-medium mb-2">Id</label>
+                            <input
+                            type="text"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900"
+                            value={id}
+                            required
+                            onChange={(e) => setBookId(e.target.value)}
+                            placeholder="Id"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-600 font-medium mb-2">Title</label>
+                            <input
+                            type="text"
+                            placeholder="The Midnight Library"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900"
+                            required
+                            onChange={(e) => setBook(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-600 font-medium mb-2">Author</label>
+                            <input
+                            type="text"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900"
+                            placeholder="Author name"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-600 font-medium mb-2">ISBN</label>
+                            <input
+                            type="text"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900"
+                            placeholder="ISBN"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-gray-600 font-medium mb-2">Publication Date</label>
+                            <div className="relative">
+                            <input
+                                type="date"
+                                id="publicationDate"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                            />
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 ) : null}
                 <button type="submit" className={`${forum === "delete" ? "bg-red-500" : "bg-blue-500"} text-white px-4 py-2 rounded cursor-pointer transition ${forum === "delete" ? "hover:bg-red-600" : "hover:bg-blue-600"} delay-200`}>

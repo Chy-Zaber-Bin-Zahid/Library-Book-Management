@@ -38,7 +38,7 @@ function Home() {
   return (
     <div className="flex h-screen bg-gray-50">
       {modal && (
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-gray-100 bg-opacity-50">
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50  bg-opacity-50">
           <Forum setModal={setModal} refetch={fetchData} id={id} />
         </div>
       )}

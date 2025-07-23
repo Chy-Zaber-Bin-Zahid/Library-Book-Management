@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addBook, deleteBook, updateBook } from "../api/apis";
 import { useMyContext } from "../context/contextApi";
+import { AlertTriangle } from "lucide-react"
 
 function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void; refetch: () => void; id: number}) {
     const { forum } = useMyContext();
@@ -25,11 +26,11 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
                 <button
                     type="button"
                     onClick={() => setModal(false)}
-                    className="absolute top-2 right-2 text-gray-600 hover:text-black text-xl font-bold cursor-pointer"
+                    className="absolute top-2 right-4 text-gray-600 hover:text-black text-2xl font-bold cursor-pointer"
                     >
                     ×
                 </button>
-                <h1 className="text-2xl font-bold mb-4">{forum === "add" ? "Add Book" : forum === "delete" ? "Delete Book" : forum === "update" ? "Update Book" : "Get All Book"}</h1>
+                <h1 className="text-2xl font-bold mb-4">{forum === "add" ? "Add Book" : forum === "delete" ? "" : forum === "update" ? "Update Book" : "Get All Book"}</h1>
                 {forum === "add" ? (
                     <input
                         type="text"
@@ -39,14 +40,27 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
                         onChange={(e) => setBook(e.target.value)}
                     />
                 ) : forum === "delete" ? (
-                    <input
-                        type="text"
-                        placeholder="Enter book id"
-                        className="border p-2 rounded w-full mb-4"
-                        value={id}
-                        required
-                        onChange={(e) => setBookId(e.target.value)}
-                    />
+                        <div>
+                             <input
+                                type="text"
+                                placeholder="Enter book id"
+                                className="border p-2 rounded w-full mb-4 hidden"
+                                value={id}
+                                required
+                                onChange={(e) => setBookId(e.target.value)}
+                            />
+                            <div className="flex justify-center mb-6">
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                                <AlertTriangle className="w-8 h-8 text-red-500" />
+                            </div>
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">Confirm Deletion</h2>
+                            <p className="text-gray-600 text-center mb-4 leading-relaxed">
+                            Are you sure you want to delete the book?
+                            This action cannot be undone.
+                            </p>
+                        </div>
+                
                 ) : forum === "update" ? (
                     <div>
                         <input
@@ -66,7 +80,7 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
                     />
                     </div>
                 ) : null}
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-600 delay-200">
+                <button type="submit" className={`${forum === "delete" ? "bg-red-500" : "bg-blue-500"} text-white px-4 py-2 rounded cursor-pointer transition ${forum === "delete" ? "hover:bg-red-600" : "hover:bg-blue-600"} delay-200`}>
                     {forum === "add" ? "Submit" : forum === "delete" ? "Delete" : forum === "update" ? "Update" : "Fetch Books" }
                 </button>
             </form>

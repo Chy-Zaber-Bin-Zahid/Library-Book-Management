@@ -7,10 +7,12 @@ export async function fetchBook() {
 }
 
 export async function addBook(data: { book: string; }) {
+  const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/books`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });
@@ -47,7 +49,13 @@ export async function login(name: string, password: string) {
     body: JSON.stringify({ name, password }),
   });
   if (!res.ok) throw new Error("Failed to login");
-  return await res.json();
+  const data = await res.json();
+
+  if (data.access_token) {
+    localStorage.setItem("token", data.access_token);
+  }
+
+  return data;
 }
 
 export async function register(name: string, password: string) {

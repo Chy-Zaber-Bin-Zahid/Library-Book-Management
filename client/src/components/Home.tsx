@@ -77,6 +77,7 @@ function Home() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
+                    <th className="text-left px-6 py-4 text-sm font-medium text-gray-600">Id</th>
                     <th className="text-left px-6 py-4 text-sm font-medium text-gray-600">Title</th>
                     <th className="text-left px-6 py-4 text-sm font-medium text-gray-600">Author</th>
                     <th className="text-left px-6 py-4 text-sm font-medium text-gray-600">ISBN</th>
@@ -87,6 +88,9 @@ function Home() {
                 <tbody className="divide-y divide-gray-200">
                   {allBooks.map((b, index) => (
                     <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <span className="font-medium">{b.id}</span>
+                      </td>
                       <td className="px-6 py-4">
                         <span className="text-blue-600 font-medium">{b.book}</span>
                       </td>
@@ -102,14 +106,14 @@ function Home() {
                           <button
                             type="button"
                             onClick={() => handleClick("update", b.id)}
-                            className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                            className="p-1 text-gray-400 cursor-pointer hover:text-blue-600 transition-colors"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
                           <button
                             type="button"
                             onClick={() => handleClick("delete", b.id)}
-                            className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                            className="p-1 text-gray-400 cursor-pointer hover:text-red-600 transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

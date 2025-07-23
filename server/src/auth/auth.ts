@@ -27,6 +27,7 @@ export class Auth {
         access_token: await this.jwtService.signAsync({
           sub: user.id,
           name: user.name,
+          role: user.role,
         }),
       };
     } catch (error) {

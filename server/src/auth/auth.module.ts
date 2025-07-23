@@ -16,7 +16,7 @@ import { AuthController } from './auth.controller';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('SECRET_KEY'),
-        signOptions: { expiresIn: '60s' },
+        signOptions: { expiresIn: '1d' },
       }),
     }),
   ],

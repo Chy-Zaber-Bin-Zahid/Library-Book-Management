@@ -2,19 +2,29 @@ import { useState } from "react";
 import { addBook, deleteBook, updateBook } from "../api/apis";
 import { useMyContext } from "../context/contextApi";
 import { AlertTriangle } from "lucide-react"
+import { useToastStore } from "../store/toastStore";
 
 function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void; refetch: () => void; id: number}) {
     const { forum } = useMyContext();
     const [book, setBook] = useState<string>("");
     const [bookId, setBookId] = useState<string>(String(id));
+    const { showToast } = useToastStore();
 
     async function handleClick() {
         if (forum === "add" && book.length > 0) {
-            await addBook({ book });             
+            const store = await addBook({ book });
+            if (store.status) {
+                showToast("Unauthorized!", "error") 
+            } else {
+                showToast("Book added!", "info") 
+            }
+                        
         } else if (forum === "delete" && bookId.length > 0) {
             await deleteBook(bookId);
+            showToast("Book deleted!", "info")
         } else if (forum === "update" && book.length > 0 && bookId .length > 0) {
             await updateBook(bookId, book);
+            showToast("Book updated!", "info")
         }
         refetch();
         setModal(false);

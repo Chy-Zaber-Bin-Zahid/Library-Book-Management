@@ -6,8 +6,12 @@ export async function fetchBook() {
 }
 
 export async function addBook(data: { book: string }) {
-  const res = await axiosInstance.post('/books', data);
-  return res.data;
+  try {
+    const res = await axiosInstance.post('/books', data);
+    return res.data;
+  } catch (error) {
+    return error;
+  }
 }
 
 export async function deleteBook(id: string) {
@@ -26,7 +30,9 @@ export async function login(name: string, password: string) {
 
   if (data.access_token) {
     localStorage.setItem('token', data.access_token);
-  }
+  } else {
+      throw new Error('Invalid credentials provided.');
+    }
 
   return data;
 }

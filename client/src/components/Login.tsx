@@ -3,21 +3,25 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { login } from "../api/apis"
+import { useToastStore } from "../store/toastStore"
 
 function Login() {
   const [name, setName] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const navigate = useNavigate()
+  const { showToast } = useToastStore();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     if (name && password) {
       try {
-        await login(name, password)
+        const store = await login(name, password)
+        console.log(store);
         navigate("/")
+        showToast("Login successful!", "success");
       } catch (error) {
         console.error("Login failed:", error)
-        alert("Invalid credentials")
+        showToast("Login failed!", "error");
       }
     }
   }

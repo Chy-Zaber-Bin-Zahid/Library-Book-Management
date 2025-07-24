@@ -13,7 +13,6 @@ export class BooksService {
         'insert into books (book) values ($1) returning *',
         [createBookDto.book],
       );
-      console.log(res.rows[0]);
       return {
         statusCode: 201,
         message: 'Book created successfully',

@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { register } from "../api/apis";
+import { useToastStore } from "../store/toastStore";
 
 function Register() {
   const [fullName, setFullName] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const navigate = useNavigate();
+  const { showToast } = useToastStore();
 
   async function handleSubmit (e: React.FormEvent) {
     e.preventDefault()
@@ -13,8 +15,10 @@ function Register() {
       try {
         await register(fullName, password)
         navigate("/login")
+        showToast("Register successful!", "success");
       } catch (error) {
         console.error("Register failed:", error)
+        showToast("Register failed!", "error");
       }
     }
   }

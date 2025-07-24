@@ -3,10 +3,12 @@ import Home from "./components/Home";
 import NoPage from "./components/NoPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Toast from "./components/Toast";
 
 function App() {
   return (
     <BrowserRouter>
+      <Toast/>
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />

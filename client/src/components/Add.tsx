@@ -2,7 +2,9 @@ import Forum from "./Forum"
 
 function Add() {
   return (
-    <Forum/>
+    <>
+     <Forum/>
+    </>
   )
 }
 

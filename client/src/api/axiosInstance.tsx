@@ -7,14 +7,14 @@ const axiosInstance = axios.create({
   },
 });
 
+const PUBLIC_ROUTES = ['/auth/login', '/auth/register'];
+
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  if (!config.headers?.skipAuth && token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  const isPublic = PUBLIC_ROUTES.some((route) => config.url?.includes(route));
 
-  if (config.headers?.skipAuth) {
-    delete config.headers.skipAuth;
+  if (!isPublic && token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;

@@ -21,11 +21,7 @@ export async function updateBook(id: string, book: string) {
 }
 
 export async function login(name: string, password: string) {
-  const res = await axiosInstance.post('/auth/login', { name, password }, {
-      headers: {
-        skipAuth: true,
-      },
-    });
+  const res = await axiosInstance.post('/auth/login', { name, password });
   const data = res.data;
 
   if (data.access_token) {
@@ -36,10 +32,6 @@ export async function login(name: string, password: string) {
 }
 
 export async function register(name: string, password: string) {
-  const res = await axiosInstance.post('/auth/register', { name, password }, {
-      headers: {
-        skipAuth: true,
-      },
-    });
+  const res = await axiosInstance.post('/auth/register', { name, password });
   return res.data;
 }

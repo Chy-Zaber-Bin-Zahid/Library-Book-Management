@@ -10,9 +10,18 @@ function Forum( { setModal, refetch, id }: { setModal: (value: boolean) => void;
     const [bookId, setBookId] = useState<string>(String(id));
     const { showToast } = useToastStore();
 
+    function parseJwt(token: string | null) {
+        if (!token) { return; }
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace('-', '+').replace('_', '/');
+        return JSON.parse(window.atob(base64));
+    }
+
     async function handleClick() {
         if (forum === "add" && book.length > 0) {
-            const store = await addBook({ book });
+            const data = parseJwt(localStorage.getItem("token"))
+            console.log(data.sub)
+            const store = await addBook(book, data.sub);
             if (store.status) {
                 showToast("Unauthorized!", "error") 
             } else {

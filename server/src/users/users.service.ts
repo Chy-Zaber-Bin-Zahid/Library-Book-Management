@@ -1,6 +1,8 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { PG_CONNECTION } from 'src/constants';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { Users } from 'src/users/entity/users.entity';
+import { Repository } from 'typeorm';
 
 type FindOne = {
   id: number;
@@ -11,35 +13,38 @@ type FindOne = {
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(PG_CONNECTION) private conn: any) {}
+  constructor(
+    @InjectRepository(Users)
+    private readonly userRepo: Repository<Users>,
+  ) {}
 
   async findOne(createUserDto: CreateUserDto): Promise<FindOne | null> {
     try {
-      const res = await this.conn.query(
-        'select * from users where name = ($1) and password = ($2)',
-        [createUserDto.name, createUserDto.password],
-      );
-      if (res.rows.length === 0) {
-        return null;
-      }
-      return res.rows[0];
+      const user = await this.userRepo.findOne({
+        where: {
+          name: createUserDto.name,
+          password: createUserDto.password,
+        },
+      });
+
+      return user ?? null;
     } catch (error) {
-      throw new NotFoundException(`Failed to find user: ${error}`);
+      throw new InternalServerErrorException(`Failed to find user: ${error}`);
     }
   }
 
   async create(createUserDto: CreateUserDto): Promise<FindOne | null> {
     try {
-      const res = await this.conn.query(
-        'insert into users (name, password, role) values ($1, $2, $3) returning *',
-        [createUserDto.name, createUserDto.password, 'user'],
-      );
-      if (res.rows.length === 0) {
-        return null;
-      }
-      return res.rows[0];
+      const user = this.userRepo.create({
+        name: createUserDto.name,
+        password: createUserDto.password,
+        role: 'user', // default role
+      });
+
+      const savedUser = await this.userRepo.save(user);
+      return savedUser ?? null;
     } catch (error) {
-      throw new NotFoundException(`Failed to find user: ${error}`);
+      throw new InternalServerErrorException(`Failed to create user: ${error}`);
     }
   }
 }

@@ -5,9 +5,12 @@ export async function fetchBook() {
   return res.data;
 }
 
-export async function addBook(data: { book: string }) {
+export async function addBook(book: string, userId: number ) {
   try {
-    const res = await axiosInstance.post('/books', data);
+    const res = await axiosInstance.post(`/books/${userId}`, {
+      book: book,
+    });
+    console.log(res)
     return res.data;
   } catch (error) {
     return error;
